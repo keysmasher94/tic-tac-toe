@@ -1,10 +1,7 @@
 /*
  * TODO:
- * - Add checks to make sure a space hasn't already been entered
- * - Add checks to make sure the number entered is between 0 and 2 (probably
- *   not necessary though, as the game will become a DOM game)
- * - At this point work on HTML/CSS
  * - Add a DOM object
+ * - Change the input from prompts to screen clicks
  * - Add a function that allows players to add their names; a start/restart
  *   function; a display element that shows the outcome of the game
  */
@@ -81,7 +78,12 @@ function newBoard() {
     if (count >= 3) return true;
     return false;
   };
-  return { updateBoard, getBoard, checkWinners };
+  // TODO: check for an empty move
+  function checkBoard(row, column) {
+    if (board[row][column] === "X" || board[row][column] === "O") return false;
+    return true;
+  }
+  return { updateBoard, getBoard, checkWinners, checkBoard };
 }
 
 function createPlayer(name, marker) {
@@ -102,22 +104,35 @@ function gameLogic(p1, p2) {
   const p2name = player2.getName();
   const p2mark = player2.getMarker();
 
-  // Create a board
+  // Create a board and associated functions
   const gameBoard = newBoard();
-  // Create a function for updating the board
   const updateBoard = gameBoard.updateBoard;
-  // Create a function for displaying the board
   const displayBoard = gameBoard.getBoard();
 
   // Begin game
   let gameOver = false;
   let turn = p1mark;
   let moves = 0;
+  // TODO: remove while loop and make it event driven
   while (!gameOver) {
     // turn
-    const row = Number(prompt("Enter row"));
-    const column = Number(prompt("Enter column"));
-    updateBoard(row, column, turn);
+    let row;
+    let column;
+    while (true) {
+      let domMove = domControl();
+      let move = domMove.makeMove(turn);
+      console.log(move);
+      row = move[0];
+      column = move[1];
+      //row = Number(prompt(`Player ${turn}: Enter row`));
+      //column = Number(prompt(`Player ${turn}: Enter column`));
+      if (gameBoard.checkBoard(row, column)) {
+        updateBoard(row, column, turn);
+        console.log(gameBoard);
+        break;
+      }
+      alert("Invalid move");
+    }
     // check for winners
     if (gameBoard.checkWinners(row, column, turn)) {
       gameOver = true;
@@ -127,7 +142,6 @@ function gameLogic(p1, p2) {
     } else {
       turn = p1mark;
     }
-    console.log(displayBoard);
     moves++;
     // 9 moves have been had, it's a tie (a win would have been caught)
     if (moves >= 9) {
@@ -135,6 +149,62 @@ function gameLogic(p1, p2) {
     }
   }
   // TODO: create a button that allows the user to reset the game
+}
+
+function domControl() {
+  /* Do I need this?
+  const topLeft = document.querySelector("#top-left");
+  const top = document.querySelector("#top");
+  const topRight = document.querySelector("#top-right");
+  const middleLeft = document.querySelector("#middle-left");
+  const middle = document.querySelector("#middle");
+  const middleRight = document.querySelector("#middle-right");
+  const bottomLeft = document.querySelector("#bottom-left");
+  const bottom = document.querySelector("#bottom");
+  const bottomRight = document.querySelector("#bottom-right");
+  */
+
+  function makeMove(marker) {
+    const domBoard = document.querySelector(".gameboard");
+    domBoard.addEventListener("click", (e) => {
+      console.log(e.target.id);
+      let cell = document.querySelector(`#${e.target.id}`);
+      cell.textContent = marker;
+      // TODO:
+      // - change this switch statement to a key-value pair of ids and their
+      // corresponding array of values, then just return the key's value
+      switch (e.target.id) {
+        case "top-left":
+          return [0, 0];
+          break;
+        case "top":
+          return [0, 1];
+          break;
+        case "top-right":
+          return [0, 2];
+          break;
+        case "middle-left":
+          return [1, 0];
+          break;
+        case "middle":
+          return [1, 1];
+          break;
+        case "middle-right":
+          return [1, 2];
+          break;
+        case "bottom-left":
+          return [2, 0];
+          break;
+        case "bottom":
+          return [2, 1];
+          break;
+        case "bottom-right":
+          return [2, 2];
+          break;
+      }
+    });
+  }
+  return { makeMove };
 }
 
 gameLogic("John", "Sarah");

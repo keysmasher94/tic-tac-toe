@@ -1,3 +1,4 @@
+/* CSS RESET */
 *,
 *::before,
 *::after {
@@ -60,4 +61,80 @@ h6 {
 #root,
 #__next {
   isolation: isolate;
+}
+
+/* My Section */
+h1 {
+  text-align: center;
+}
+
+body {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.gameboard {
+  background: yellow;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-areas:
+    "top-left tp top-right"
+    "middle-left mid middle-right"
+    "bottom-left bot bottom-right";
+  align-items: center;
+  justify-items: center;
+  gap: 2rem;
+  width: 70vw;
+  height: 70vh;
+}
+
+#top-left {
+  grid-area: top-left;
+}
+
+#top {
+  grid-area: tp;
+}
+
+#top-right {
+  grid-area: top-right;
+}
+
+#middle-left {
+  grid-area: middle-left;
+}
+
+#middle {
+  grid-area: mid;
+}
+
+#middle-right {
+  grid-area: middle-right;
+}
+
+#bottom-left {
+  grid-area: bottom-left;
+}
+
+#bottom {
+  grid-area: bot;
+}
+
+#bottom-right {
+  grid-area: bottom-right;
+}
+/*
+.row {
+  background: green;
+  height: 100px;
+  width: 100px;
+}
+*/
+
+.gameboard > div {
+  background: green;
+  height: 100%;
+  width: 100%;
 }
