@@ -89,11 +89,16 @@ function createGameboard() {
   return { getBoard, updateBoard, isWinner, isEmpty };
 }
 
-// XXX: maybe don't set name, marker as parameters
-function createPlayers(name, marker) {
+function createPlayers() {
+  let name;
+  let marker;
+  const setInformation = (setName, setMarker) => {
+    name = setName;
+    marker = setMarker;
+  };
   const getName = () => name;
   const getMarker = () => marker;
-  return { getName, getMarker };
+  return { setInformation, getName, getMarker };
 }
 
 //function gameLogic(p1, p2, gameboard) {
@@ -111,13 +116,12 @@ function gameLogic() {
   };
 
   const processInput = (p1, p2, gameboard) => {
-    // TODO: more will need to go in here
     let moveCount = 0;
     let gameOver = false;
     let player = p1;
     let marker = player.getMarker();
-    body.addEventListener("click", (e) => {
-      if (gameOver) return;
+    //body.addEventListener("click", (e) => {
+    function handleClick(e) {
       // log where the turn will be
       const moves = domToArrayMap[e.target.id];
       // Check if space is free
@@ -132,7 +136,10 @@ function gameLogic() {
       // Check for a winner
       if (gameboard.isWinner(moves[0], moves[1], marker)) {
         // XXX: GAME OVER STATE; maybe trigger a button on screen to reset
+        // and then call `main()` again; as well as write the winners name
+        // to a screen
         console.log(`${player.getName()} wins`);
+        body.removeEventListener("click", handleClick);
         gameOver = true;
       }
       // Change player turns
@@ -147,25 +154,40 @@ function gameLogic() {
       if (moveCount >= 9) {
         // XXX: TIE STATE; same as if there's a winner
         console.log("It's a draw");
+        body.removeEventListener("click", handleClick);
         gameOver = true;
       }
-    });
+    }
+    body.addEventListener("click", handleClick);
   };
 
   return { processInput, domToArrayMap };
 }
 
 function main() {
-  // Create players
-  const player1 = createPlayers("John", "X");
-  const player2 = createPlayers("Mary", "O");
   // Create board
   const gameboard = createGameboard();
+  // TODO:
+  // - add a display for the winner's name to go into
+  // - add inputs for the user's to enter their names
+  // Create players
+  // p1name = ...
+  // p2name = ...
+  const player1 = createPlayers();
+  player1.setInformation("John", "X");
+  const player2 = createPlayers();
+  player2.setInformation("Mary", "O");
   // Start game
   const game = gameLogic();
   game.processInput(player1, player2, gameboard);
 }
 
-// XXX: currently working in 'addEventListener' section
-
 main();
+
+/* TODO:
+ * - Place images rather than text in boxes
+ * - Allow users to put in their names
+ * - Include a 'start'/'restart' button
+ * - Add a display that shows the results at the end of the game
+ * - Clean up the UI
+ */
