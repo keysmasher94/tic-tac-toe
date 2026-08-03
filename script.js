@@ -1,5 +1,6 @@
 // Constants
 const body = document.querySelector("body");
+// XXX: these may not be necessary
 const PLAYER_ONE = "X";
 const PLAYER_TWO = "O";
 
@@ -16,7 +17,6 @@ function createGameboard() {
     board[row][column] = marker;
   };
 
-  // FIXME: bottom-left to top-right doesn't work on dom
   const isWinner = (row, column, marker) => {
     // HORIZONTAL CHECK
     let count = 1;
@@ -96,7 +96,8 @@ function createPlayers(name, marker) {
   return { getName, getMarker };
 }
 
-function gameLogic(p1, p2, gameboard) {
+//function gameLogic(p1, p2, gameboard) {
+function gameLogic() {
   const domToArrayMap = {
     "top-left": [0, 0],
     top: [0, 1],
@@ -111,21 +112,28 @@ function gameLogic(p1, p2, gameboard) {
 
   const processInput = (p1, p2, gameboard) => {
     // TODO: more will need to go in here
+    let moveCount = 0;
+    let gameOver = false;
     let player = p1;
     let marker = player.getMarker();
     body.addEventListener("click", (e) => {
+      if (gameOver) return;
       // log where the turn will be
       const moves = domToArrayMap[e.target.id];
       // Check if space is free
-      gameboard.isEmpty(moves[0], moves[1]);
+      if (!gameboard.isEmpty(moves[0], moves[1])) {
+        // Stops from entering input twice on one cell
+        return;
+      }
       // Update cell
       gameboard.updateBoard(moves[0], moves[1], marker);
       let cell = document.querySelector(`#${e.target.id}`);
       cell.textContent = marker;
       // Check for a winner
       if (gameboard.isWinner(moves[0], moves[1], marker)) {
-        // XXX:
+        // XXX: GAME OVER STATE; maybe trigger a button on screen to reset
         console.log(`${player.getName()} wins`);
+        gameOver = true;
       }
       // Change player turns
       if (player === p1) {
@@ -134,6 +142,12 @@ function gameLogic(p1, p2, gameboard) {
       } else {
         player = p1;
         marker = player.getMarker();
+      }
+      moveCount++;
+      if (moveCount >= 9) {
+        // XXX: TIE STATE; same as if there's a winner
+        console.log("It's a draw");
+        gameOver = true;
       }
     });
   };
@@ -148,8 +162,7 @@ function main() {
   // Create board
   const gameboard = createGameboard();
   // Start game
-  // XXX: parameters in game may be redundant
-  const game = gameLogic(player1, player2, gameboard);
+  const game = gameLogic();
   game.processInput(player1, player2, gameboard);
 }
 
