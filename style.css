@@ -1,4 +1,3 @@
-/* CSS RESET */
 *,
 *::before,
 *::after {
@@ -63,78 +62,53 @@ h6 {
   isolation: isolate;
 }
 
-/* My Section */
-h1 {
-  text-align: center;
+.container {
+  display: grid;
+  width: 40vw;
+  height: 40vh;
+  background-color: green;
+  gap: 14px;
+  grid-template-areas: "a b c" "d e f" "g h i";
 }
 
-body {
-  display: grid;
-  justify-items: center;
-  align-items: center;
-}
-
-.gameboard {
-  background: yellow;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-areas:
-    "top-left tp top-right"
-    "middle-left mid middle-right"
-    "bottom-left bot bottom-right";
-  align-items: center;
-  justify-items: center;
-  gap: 2rem;
-  width: 70vw;
-  height: 70vh;
+.container > div {
+  background-color: yellow;
+  width: 100%;
+  height: 100%;
 }
 
 #top-left {
-  grid-area: top-left;
+  grid-area: a;
 }
 
 #top {
-  grid-area: tp;
+  grid-area: b;
 }
 
 #top-right {
-  grid-area: top-right;
+  grid-area: c;
 }
 
-#middle-left {
-  grid-area: middle-left;
+#mid-left {
+  grid-area: d;
 }
 
-#middle {
-  grid-area: mid;
+#mid {
+  grid-area: e;
 }
 
-#middle-right {
-  grid-area: middle-right;
+#mid-right {
+  grid-area: f;
 }
 
-#bottom-left {
-  grid-area: bottom-left;
+#bot-left {
+  grid-area: g;
 }
 
-#bottom {
-  grid-area: bot;
+#bot {
+  grid-area: h;
 }
 
-#bottom-right {
-  grid-area: bottom-right;
-}
-/*
-.row {
-  background: green;
-  height: 100px;
-  width: 100px;
-}
-*/
-
-.gameboard > div {
-  background: green;
-  height: 100%;
-  width: 100%;
+#bot-right {
+  grid-area: i;
 }
