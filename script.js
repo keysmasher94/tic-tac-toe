@@ -1,8 +1,10 @@
+// TODO:
+// - Include single player mode with oponent with easy,medium,impossible modes
+
 // Constants
 const body = document.querySelector("body");
-// XXX: these may not be necessary
-const PLAYER_ONE = "X";
-const PLAYER_TWO = "O";
+const startBtn = document.querySelector(".start");
+const display = document.querySelector(".display");
 
 function createGameboard() {
   const board = [
@@ -21,22 +23,22 @@ function createGameboard() {
     // HORIZONTAL CHECK
     let count = 1;
     // Right
-    for (c = column + 1; c <= 2 && board[row][c] === marker; c++) {
+    for (let c = column + 1; c <= 2 && board[row][c] === marker; c++) {
       count++;
     }
     // Left
-    for (c = column - 1; c >= 0 && board[row][c] === marker; c--) {
+    for (let c = column - 1; c >= 0 && board[row][c] === marker; c--) {
       count++;
     }
     if (count >= 3) return true;
     // VERTICAL CHECK
     count = 1;
     // Up
-    for (r = row - 1; r >= 0 && board[r][column] === marker; r--) {
+    for (let r = row - 1; r >= 0 && board[r][column] === marker; r--) {
       count++;
     }
     // Down
-    for (r = row + 1; r <= 2 && board[r][column] === marker; r++) {
+    for (let r = row + 1; r <= 2 && board[r][column] === marker; r++) {
       count++;
     }
     if (count >= 3) return true;
@@ -44,7 +46,7 @@ function createGameboard() {
     count = 1;
     // Up/Right
     for (
-      r = row - 1, c = column + 1;
+      let r = row - 1, c = column + 1;
       r >= 0 && c <= 2 && board[r][c] === marker;
       r--, c++
     ) {
@@ -52,7 +54,7 @@ function createGameboard() {
     }
     // Down/Left
     for (
-      r = row + 1, c = column - 1;
+      let r = row + 1, c = column - 1;
       r <= 2 && c >= 0 && board[r][c] === marker;
       r++, c--
     ) {
@@ -63,7 +65,7 @@ function createGameboard() {
     count = 1;
     // Down/Right
     for (
-      r = row + 1, c = column + 1;
+      let r = row + 1, c = column + 1;
       r <= 2 && c <= 2 && board[r][c] === marker;
       r++, c++
     ) {
@@ -71,7 +73,7 @@ function createGameboard() {
     }
     // Up/Left
     for (
-      r = row - 1, c = column - 1;
+      let r = row - 1, c = column - 1;
       r >= 0 && c >= 0 && board[r][c] === marker;
       r--, c--
     ) {
@@ -117,13 +119,13 @@ function gameLogic() {
 
   const processInput = (p1, p2, gameboard) => {
     let moveCount = 0;
-    let gameOver = false;
     let player = p1;
     let marker = player.getMarker();
     //body.addEventListener("click", (e) => {
     function handleClick(e) {
       // log where the turn will be
       const moves = domToArrayMap[e.target.id];
+      if (!moves) return;
       // Check if space is free
       if (!gameboard.isEmpty(moves[0], moves[1])) {
         // Stops from entering input twice on one cell
@@ -132,15 +134,32 @@ function gameLogic() {
       // Update cell
       gameboard.updateBoard(moves[0], moves[1], marker);
       let cell = document.querySelector(`#${e.target.id}`);
-      cell.textContent = marker;
+      if (player === p1) {
+        cell.style.backgroundImage = "url(./images/x.png)";
+        cell.style.backgroundPosition = "center";
+        cell.style.backgroundRepeat = "no-repeat";
+        cell.style.height = "100%";
+      } else {
+        cell.style.backgroundImage = "url(./images/oSmall.png)";
+        cell.style.backgroundPosition = "center";
+        cell.style.backgroundRepeat = "no-repeat";
+        cell.style.height = "100%";
+      }
       // Check for a winner
       if (gameboard.isWinner(moves[0], moves[1], marker)) {
-        // XXX: GAME OVER STATE; maybe trigger a button on screen to reset
-        // and then call `main()` again; as well as write the winners name
-        // to a screen
-        console.log(`${player.getName()} wins`);
+        display.textContent = `${player.getName()} Wins!`;
         body.removeEventListener("click", handleClick);
-        gameOver = true;
+        startBtn.textContent = "Play Again";
+        startBtn.onclick = handleBtnClick;
+      }
+
+      function handleBtnClick() {
+        main();
+        display.textContent = "";
+        for (key in domToArrayMap) {
+          let cell = document.querySelector(`#${key}`);
+          cell.style.backgroundImage = "none";
+        }
       }
       // Change player turns
       if (player === p1) {
@@ -152,10 +171,10 @@ function gameLogic() {
       }
       moveCount++;
       if (moveCount >= 9) {
-        // XXX: TIE STATE; same as if there's a winner
-        console.log("It's a draw");
+        display.textContent = `It's a draw...`;
         body.removeEventListener("click", handleClick);
-        gameOver = true;
+        startBtn.textContent = "Play Again";
+        startBtn.onclick = handleBtnClick;
       }
     }
     body.addEventListener("click", handleClick);
@@ -167,27 +186,20 @@ function gameLogic() {
 function main() {
   // Create board
   const gameboard = createGameboard();
-  // TODO:
-  // - add a display for the winner's name to go into
-  // - add inputs for the user's to enter their names
   // Create players
-  // p1name = ...
-  // p2name = ...
   const player1 = createPlayers();
-  player1.setInformation("John", "X");
+  player1.setInformation(p1Name || "Alice", "X");
   const player2 = createPlayers();
-  player2.setInformation("Mary", "O");
+  player2.setInformation(p2Name || "Bob", "O");
   // Start game
   const game = gameLogic();
   game.processInput(player1, player2, gameboard);
 }
 
-main();
+const p1Name = prompt("Enter player 1's name");
+const p2Name = prompt("Enter player 2's name");
+startBtn.addEventListener("click", main);
 
 /* TODO:
- * - Place images rather than text in boxes
- * - Allow users to put in their names
- * - Include a 'start'/'restart' button
- * - Add a display that shows the results at the end of the game
  * - Clean up the UI
  */
