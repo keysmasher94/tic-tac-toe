@@ -5,6 +5,8 @@
 const body = document.querySelector("body");
 const startBtn = document.querySelector(".start");
 const display = document.querySelector(".display");
+const playerNames = document.querySelector("#player-names");
+const form = document.querySelector("form");
 
 function createGameboard() {
   const board = [
@@ -196,8 +198,17 @@ function main() {
   game.processInput(player1, player2, gameboard);
 }
 
-const p1Name = prompt("Enter player 1's name");
-const p2Name = prompt("Enter player 2's name");
+let p1Name = "";
+let p2Name = "";
+playerNames.addEventListener("click", (e) => {
+  e.preventDefault();
+  p1Name = e.target.form[0].value;
+  p2Name = e.target.form[1].value;
+  body.removeChild(form);
+  const displayNames = document.createElement("p");
+  displayNames.textContent = `Player 1: ${p1Name} Player 2: ${p2Name}`;
+  body.insertBefore(displayNames, startBtn);
+});
 startBtn.addEventListener("click", main);
 
 /* TODO:
