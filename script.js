@@ -190,7 +190,7 @@ function gameLogic() {
         marker = player.getMarker();
       }
       moveCount++;
-      if (moveCount >= 9 && !gameboard.isWinner(moves[0], moves[1], marker)) {
+      if (moveCount >= 9) {
         display.textContent = `It's a draw...`;
         body.removeEventListener("click", handleClick);
         startBtn.textContent = "Play Again";
