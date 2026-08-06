@@ -171,6 +171,7 @@ function gameLogic() {
         body.removeEventListener("click", handleClick);
         startBtn.textContent = "Play Again";
         startBtn.onclick = handleBtnClick;
+        return;
       }
 
       function handleBtnClick() {
