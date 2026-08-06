@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!-- add icon -->
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./images/icon.svg" type="image/svg+xml" />
     <script src="script.js" defer></script>
     <title>Tic-Tac-Toe</title>
   </head>
@@ -23,10 +24,12 @@
       <div id="bot-right"></div>
     </div>
     <form name="names">
-      <label for="player-one">Enter player one's name</label>
-      <input type="text" id="player-one" />
-      <label for="player-two">Enter player two's name</label>
-      <input type="text" id="player-two" />
+      <div class="inputs">
+        <label for="player-one">Enter player one's name</label>
+        <input type="text" id="player-one" />
+        <label for="player-two">Enter player two's name</label>
+        <input type="text" id="player-two" />
+      </div>
       <button type="submit" id="player-names">Submit</button>
     </form>
     <button class="start">Start</button>

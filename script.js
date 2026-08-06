@@ -193,6 +193,7 @@ function main() {
   player1.setInformation(p1Name || "Alice", "X");
   const player2 = createPlayers();
   player2.setInformation(p2Name || "Bob", "O");
+  startBtn.textContent = "Play Again";
   // Start game
   const game = gameLogic();
   game.processInput(player1, player2, gameboard);
@@ -205,12 +206,22 @@ playerNames.addEventListener("click", (e) => {
   p1Name = e.target.form[0].value;
   p2Name = e.target.form[1].value;
   body.removeChild(form);
+  /*
   const displayNames = document.createElement("p");
   displayNames.textContent = `Player 1: ${p1Name} Player 2: ${p2Name}`;
+  */
+  const displayNames = document.createElement("div");
+  displayNames.className = "displayNames";
+  const leftName = document.createElement("p");
+  p1Name
+    ? (leftName.textContent = `Player 1: ${p1Name}`)
+    : (leftName.textContent = "Player 1: Alice");
+  const rightName = document.createElement("p");
+  p2Name
+    ? (rightName.textContent = `Player 2: ${p2Name}`)
+    : (rightName.textContent = "Player 2: Bob");
+  displayNames.appendChild(leftName);
+  displayNames.appendChild(rightName);
   body.insertBefore(displayNames, startBtn);
 });
 startBtn.addEventListener("click", main);
-
-/* TODO:
- * - Clean up the UI
- */

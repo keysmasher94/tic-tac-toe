@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+
+  <!-- Rounded square background -->
+  <rect width="64" height="64" rx="12" fill="#FFFFFF"/>
+
+  <!-- Grid -->
+  <g stroke="#3B82F6" stroke-width="3" stroke-linecap="round">
+    <line x1="21" y1="12" x2="21" y2="52"/>
+    <line x1="43" y1="12" x2="43" y2="52"/>
+    <line x1="12" y1="21" x2="52" y2="21"/>
+    <line x1="12" y1="43" x2="52" y2="43"/>
+  </g>
+
+  <!-- X -->
+  <g stroke="#EF4444" stroke-width="3.5" stroke-linecap="round">
+    <line x1="15" y1="15" x2="27" y2="27"/>
+    <line x1="27" y1="15" x2="15" y2="27"/>
+  </g>
+
+  <!-- O -->
+  <circle
+    cx="54"
+    cy="10"
+    r="6"
+    fill="none"
+    stroke="#10B981"
+    stroke-width="3"/>
+
+  <!-- Star -->
+  <path
+    fill="#FBBF24"
+    d="M47 46
+       L48.5 50
+       L53 51
+       L48.5 52
+       L47 56
+       L45.5 52
+       L41 51
+       L45.5 50Z"/>
+</svg>
