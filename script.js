@@ -190,7 +190,7 @@ function gameLogic() {
         marker = player.getMarker();
       }
       moveCount++;
-      if (moveCount >= 9) {
+      if (moveCount >= 9 && !gameboard.isWinner(moves[0], moves[1], marker)) {
         display.textContent = `It's a draw...`;
         body.removeEventListener("click", handleClick);
         startBtn.textContent = "Play Again";
@@ -243,3 +243,5 @@ playerNames.addEventListener("click", (e) => {
   body.insertBefore(displayNames, startBtn);
 });
 startBtn.addEventListener("click", main);
+
+// FIXME: if a win is achieved on the final move, a draw is presented, not a win
