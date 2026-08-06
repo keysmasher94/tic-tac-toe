@@ -177,7 +177,7 @@ function gameLogic() {
       function handleBtnClick() {
         main();
         display.textContent = "";
-        for (key in domToArrayMap) {
+        for (const key in domToArrayMap) {
           let cell = document.querySelector(`#${key}`);
           cell.style.backgroundImage = "none";
         }
@@ -244,5 +244,3 @@ playerNames.addEventListener("click", (e) => {
   body.insertBefore(displayNames, startBtn);
 });
 startBtn.addEventListener("click", main);
-
-// FIXME: if a win is achieved on the final move, a draw is presented, not a win
